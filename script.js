@@ -49,6 +49,8 @@ const projectSlides = [
   }
 ];
 
+const caseStudies = Array.isArray(window.caseStudiesData) ? window.caseStudiesData : [];
+
 const root = document.documentElement;
 const heroTitle = document.getElementById("hero-title");
 const heroDescription = document.getElementById("hero-description");
@@ -60,12 +62,25 @@ const projectImage = document.getElementById("project-image");
 const projectSpecs = document.querySelector(".project-specs");
 const projectPrev = document.getElementById("project-prev");
 const projectNext = document.getElementById("project-next");
+const caseSection = document.getElementById("case-studies");
+const caseTag = document.getElementById("case-tag");
+const caseTitle = document.getElementById("case-title");
+const caseMeta = document.getElementById("case-meta");
+const caseDescription = document.getElementById("case-description");
+const caseHighlights = document.getElementById("case-highlights");
+const caseImage = document.getElementById("case-image");
+const caseLink = document.getElementById("case-link");
+const caseDots = document.getElementById("case-dots");
+const caseList = document.getElementById("case-list");
+const casePrev = document.getElementById("case-prev");
+const caseNext = document.getElementById("case-next");
 const menuToggle = document.querySelector(".menu-toggle");
 const siteHeader = document.querySelector(".site-header");
 const siteMenu = document.getElementById("site-menu");
 
 let heroCurrent = 0;
 let projectCurrent = 0;
+let caseCurrent = 0;
 let heroTimer;
 
 function renderHero(index) {
@@ -97,6 +112,29 @@ function renderProject(index) {
   projectSpecs.innerHTML = slide.specs.map((item) => `<li>${item}</li>`).join("");
 }
 
+function renderCaseStudy(index) {
+  const study = caseStudies[index];
+  caseTag.textContent = study.tag;
+  caseTitle.textContent = study.title;
+  caseMeta.textContent = study.meta;
+  caseDescription.textContent = study.description;
+  caseImage.src = study.image;
+  caseImage.alt = study.title;
+  caseHighlights.innerHTML = study.highlights.map((item) => `<li>${item}</li>`).join("");
+  caseLink.href = study.link;
+  caseLink.textContent = study.linkLabel;
+
+  document.querySelectorAll(".case-dot").forEach((dot, dotIndex) => {
+    dot.classList.toggle("is-active", dotIndex === index);
+  });
+
+  document.querySelectorAll(".case-list-item").forEach((item, itemIndex) => {
+    const isActive = itemIndex === index;
+    item.classList.toggle("is-active", isActive);
+    item.setAttribute("aria-pressed", String(isActive));
+  });
+}
+
 heroSlides.forEach((_, index) => {
   const dot = document.createElement("button");
   dot.className = "hero-dot";
@@ -119,6 +157,47 @@ projectNext.addEventListener("click", () => {
   projectCurrent = (projectCurrent + 1) % projectSlides.length;
   renderProject(projectCurrent);
 });
+
+if (caseStudies.length > 0) {
+  caseStudies.forEach((study, index) => {
+    const dot = document.createElement("button");
+    dot.className = "case-dot";
+    dot.type = "button";
+    dot.setAttribute("aria-label", `切換到案例 ${index + 1}`);
+    dot.addEventListener("click", () => {
+      caseCurrent = index;
+      renderCaseStudy(caseCurrent);
+    });
+    caseDots.appendChild(dot);
+
+    const item = document.createElement("button");
+    item.className = "case-list-item";
+    item.type = "button";
+    item.innerHTML = `
+      <span class="case-list-tag">${study.tag}</span>
+      <h4>${study.title}</h4>
+      <p class="case-list-meta">${study.meta}</p>
+      <p class="case-list-description">${study.description}</p>
+    `;
+    item.addEventListener("click", () => {
+      caseCurrent = index;
+      renderCaseStudy(caseCurrent);
+    });
+    caseList.appendChild(item);
+  });
+
+  casePrev.addEventListener("click", () => {
+    caseCurrent = (caseCurrent - 1 + caseStudies.length) % caseStudies.length;
+    renderCaseStudy(caseCurrent);
+  });
+
+  caseNext.addEventListener("click", () => {
+    caseCurrent = (caseCurrent + 1) % caseStudies.length;
+    renderCaseStudy(caseCurrent);
+  });
+} else if (caseSection) {
+  caseSection.hidden = true;
+}
 
 menuToggle.addEventListener("click", () => {
   const isOpen = siteHeader.classList.toggle("menu-open");
@@ -153,4 +232,7 @@ document.querySelectorAll("[data-reveal]").forEach((element) => {
 
 renderHero(heroCurrent);
 renderProject(projectCurrent);
+if (caseStudies.length > 0) {
+  renderCaseStudy(caseCurrent);
+}
 startHeroRotation();
