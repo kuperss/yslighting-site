@@ -32,18 +32,18 @@ window.caseStudiesData = [
     linkLabel: "詢問商空規劃"
   },
   {
-    tag: "展示照明案例",
-    title: "展示牆與櫃體層次照明",
+    tag: "戶外照明案例",
+    title: "戶外景觀層次照明",
     meta: "Display Lighting · Kaohsiung",
     description:
-      "針對展示牆、精品櫃體與立面材質設計光層次，讓商品或收藏品在空間中更有視覺焦點。",
+      "針對建築外牆、庭園照明設計光層次，讓戶外空間更有視覺焦點。",
     highlights: [
-      "壁洗光與櫃體背光整合",
-      "提升材質紋理與展示感",
-      "適合門市與接待空間"
+      "壁洗光與氛圍光整合",
+      "提升材質紋理與設計感",
+      "適合別墅或商業空間"
     ],
     image: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=80",
     link: "#contact",
-    linkLabel: "討論展示需求"
+    linkLabel: "討論規劃需求"
   }
 ];
